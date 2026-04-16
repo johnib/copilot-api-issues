@@ -7,6 +7,7 @@ on:
 
 jobs:
   claude-review:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,7 +30,7 @@ jobs:
           track_progress: true
           additional_permissions: |
             actions: read
-          claude_args: '--model claude-opus-4-6'
+          claude_args: '--model claude-opus-4-7'
           prompt: |
             /review-pr PR NUMBER: ${{ github.event.pull_request.number }} in REPO: ${{ github.repository }}
         env:
