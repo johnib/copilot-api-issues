@@ -7,19 +7,19 @@
 ![Closed Source](https://img.shields.io/badge/source-closed-6c737a)
 [![License: MIT](https://img.shields.io/badge/license-MIT-22863a)](./LICENSE)
 
-A proxy server that turns a GitHub Copilot subscription into fully compatible OpenAI and Anthropic API endpoints. Use Claude Code, Codex CLI, and any tool that speaks the API -- all through the Copilot plan you already pay for, no separate API keys required.
+A proxy server that turns a GitHub Copilot subscription into fully compatible OpenAI and Anthropic API endpoints. Use Claude Code, Claude Cowork, Codex CLI, and any tool that speaks the API -- all through the Copilot plan you already pay for, no separate API keys required.
 
 ```
   Clients                    Proxy                     Backends
   ───────                    ─────                     ────────
 
-  Claude Code ─┐                                  ┌─▶ GitHub Copilot API
-  Codex CLI   ─┤   Anthropic    ┌────────────┐    │     Chat Completions
-  OpenAI SDK  ─┼──────or───────▶│ copilot-api │───┤     Responses API
-  curl        ─┤   OpenAI       └────────────┘    │     Embeddings
-  Any tool    ─┘    format                        │
-                                                  └─▶ Tavily
-                                                        Web Search
+  Claude Code  ─┐                                 ┌─▶ GitHub Copilot API
+  Claude Cowork─┤  Anthropic    ┌────────────┐    │     Chat Completions
+  Codex CLI    ─┤─────or───────▶│ copilot-api │───┤     Responses API
+  OpenAI SDK   ─┤  OpenAI       └────────────┘    │     Embeddings
+  curl         ─┤  format                         │
+  Any tool     ─┘                                 └─▶ Tavily
+                                                       Web Search
 ```
 
 ---
@@ -31,10 +31,12 @@ A proxy server that turns a GitHub Copilot subscription into fully compatible Op
   - [Claude Code](#claude-code)
   - [Codex CLI](#codex-cli)
   - [Web Search](#web-search)
+  - [Claude Cowork](#claude-cowork)
 - [API Endpoints](#api-endpoints)
 - [CLI Reference](#cli-reference)
   - [Commands](#commands)
   - [start Flags](#start-flags)
+  - [cowork-setup](#cowork-setup)
 - [Telemetry](#telemetry)
 - [Closed Source](#closed-source)
 - [Notices](#notices)
@@ -48,9 +50,11 @@ A proxy server that turns a GitHub Copilot subscription into fully compatible Op
 | Feature | Description |
 |:--|:--|
 | **Full Claude Code support** | All Claude models, streaming, extended thinking, and the complete **1M token context window** |
+| **Claude Cowork support** | Run Claude's desktop app through Copilot — **one-command setup** via [Tailscale](https://tailscale.com) for zero-trust-hassle HTTPS |
 | **Full Codex CLI support** | Complete **OpenAI Responses API** implementation purpose-built for Codex CLI |
 | **Web search** | Optional **Tavily-powered web search** available to both Claude Code and Codex sessions |
 | **Dual API compatibility** | OpenAI Chat Completions, Anthropic Messages, and OpenAI Responses APIs side by side |
+| **HTTPS with auto-generated certs** | Self-signed TLS certs with configurable SANs -- works across VMs, containers, and LAN |
 | **Zero configuration** | Single command to start -- authenticates via GitHub device-code OAuth |
 
 ---
@@ -118,11 +122,34 @@ npx copilot-api-node20@latest start --claude-code --tavily-api-key <key>
 
 Alternatively, set `TAVILY_API_KEY` as an environment variable. The proxy operates normally when no key is provided -- web search is simply unavailable.
 
+### Claude Cowork
+
+Use Claude's desktop app ([Cowork](https://claude.ai/desktop)) with your Copilot subscription. Requires [Tailscale](https://tailscale.com) (free for personal use) for a real Let's Encrypt TLS certificate — no self-signed cert headaches.
+
+**1. Install [Tailscale](https://tailscale.com/download)** and sign in. On macOS, use the [App Store or .pkg download](https://tailscale.com/download/mac) (not brew). See [docs/claude-cowork.md](./docs/claude-cowork.md) for Linux/Windows.
+
+**2. Generate a TLS cert and configure the proxy:**
+
+```bash
+npx copilot-api-node20@latest cowork-setup install
+npx copilot-api-node20@latest start --claude-cowork
+```
+
+**3.** Follow Anthropic's [Cowork 3P Installation guide](https://claude.com/docs/cowork/3p/installation). When prompted for the gateway URL, paste the Tailscale hostname from the startup banner (e.g. `https://your-machine.tail12345.ts.net:4141`), then **restart Cowork**.
+
+Run `cowork-setup doctor` at any time to diagnose issues:
+
+```bash
+npx copilot-api-node20@latest cowork-setup doctor
+```
+
+See **[docs/claude-cowork.md](./docs/claude-cowork.md)** for the full setup guide and troubleshooting. For Cowork's own configuration docs, see [Claude Cowork 3P Installation](https://claude.com/docs/cowork/3p/installation).
+
 ---
 
 ## API Endpoints
 
-All endpoints are served at `http://localhost:4141` by default.
+All endpoints are served at `http://localhost:4141` by default (`https://` when `--https` or `--claude-cowork` is used).
 
 | Method | Path | Compatibility |
 |:--|:--|:--|
@@ -146,6 +173,7 @@ All OpenAI-compatible routes are also available without the `/v1/` prefix.
 | `copilot-api auth` | Authenticate with GitHub |
 | `copilot-api check-usage` | Display Copilot usage quota |
 | `copilot-api debug` | Print diagnostic information |
+| `copilot-api cowork-setup` | Manage Claude Cowork OS-level setup |
 
 ### `start` Flags
 
@@ -170,8 +198,27 @@ All OpenAI-compatible routes are also available without the `/v1/` prefix.
 | `--show-token` | | | Display tokens on fetch and refresh |
 | `--tavily-api-key` | | | Tavily API key for web search |
 | `--verbose` | `-v` | | Enable debug-level logging |
+| `--https` | | | Serve over HTTPS using a self-signed cert |
+| `--https-cert` | | | Path to a PEM-encoded TLS certificate (use with `--https-key`) |
+| `--https-key` | | | Path to a PEM-encoded TLS private key (use with `--https-cert`) |
+| `--https-hosts` | | | Extra hostnames or IPs to include in the cert's SANs (comma-separated) |
+| `--claude-cowork` | | | Auto-detect Tailscale cert and enable HTTPS for Cowork. Run `cowork-setup install` first. See [docs/claude-cowork.md](./docs/claude-cowork.md) |
 
 </details>
+
+### `cowork-setup`
+
+Manage [Tailscale](https://tailscale.com)-based HTTPS for Claude Cowork.
+
+| Subcommand | Description |
+|:--|:--|
+| `cowork-setup doctor` | Diagnose Tailscale + cert status |
+| `cowork-setup install` | Generate a Tailscale TLS certificate for Cowork |
+| `cowork-setup revert` | Remove the generated cert files |
+
+Requires Tailscale installed and connected (`tailscale up`). See [docs/claude-cowork.md](./docs/claude-cowork.md).
+
+Platform support: **macOS**, **Linux**, **Windows** — anywhere Tailscale runs.
 
 ---
 
