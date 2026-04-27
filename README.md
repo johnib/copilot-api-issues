@@ -10,16 +10,17 @@
 A proxy server that turns a GitHub Copilot subscription into fully compatible OpenAI and Anthropic API endpoints. Use Claude Code, Claude Cowork, Codex CLI, and any tool that speaks the API -- all through the Copilot plan you already pay for, no separate API keys required.
 
 ```
-  Clients                    Proxy                     Backends
-  ───────                    ─────                     ────────
+  Clients                        Proxy                         Backends
+  ───────                        ─────                         ────────
 
-  Claude Code  ─┐                                 ┌─▶ GitHub Copilot API
-  Claude Cowork─┤  Anthropic    ┌────────────┐    │     Chat Completions
-  Codex CLI    ─┤─────or───────▶│ copilot-api │───┤     Responses API
-  OpenAI SDK   ─┤  OpenAI       └────────────┘    │     Embeddings
-  curl         ─┤  format                         │
-  Any tool     ─┘                                 └─▶ Tavily
-                                                       Web Search
+  Claude Code   ─┐                                        ┌─▶ GitHub Copilot API
+  Claude Cowork ─┤  /v1/messages     ┌─────────────┐      │     Messages
+  Codex CLI     ─┤───── or ─────────▶│ copilot-api │──────┤     Chat Completions
+  OpenAI SDK    ─┤  /v1/chat/        └─────────────┘      │     Responses API
+  curl          ─┤  completions                           │     Embeddings
+  Any tool      ─┘                                        │
+                                                          └─▶ Tavily
+                                                               Web Search
 ```
 
 ---
