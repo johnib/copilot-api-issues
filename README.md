@@ -149,7 +149,7 @@ See **[docs/claude-cowork.md](./docs/claude-cowork.md)** for the full setup guid
 
 ## API Endpoints
 
-All endpoints are served at `http://localhost:4141` by default (`https://` when `--https` or `--claude-cowork` is used).
+All endpoints are served at `http://localhost:4141` by default (`https://` when `--https` or `--claude-cowork` is used). The server binds to `127.0.0.1` (localhost only) by default. To expose to LAN/network/Docker, pass `--hostname 0.0.0.0`.
 
 | Method | Path | Compatibility |
 |:--|:--|:--|
@@ -187,6 +187,7 @@ All OpenAI-compatible routes are also available without the `/v1/` prefix.
 | Flag | Alias | Default | Description |
 |:--|:--|:--|:--|
 | `--port` | `-p` | `4141` | Port to listen on |
+| `--hostname` | `-H` | `127.0.0.1` | Hostname/IP to bind to. Use `0.0.0.0` for LAN/Docker exposure |
 | `--claude-code` | `-c` | | Enable Claude Code compatibility mode |
 | `--codex` | | | Enable Codex CLI compatibility mode |
 | `--model` | `-m` | | Primary model to use |
@@ -195,7 +196,7 @@ All OpenAI-compatible routes are also available without the `/v1/` prefix.
 | `--timeout` | `-t` | `600000` | Request timeout in ms (default 10 min) |
 | `--account-type` | `-a` | `individual` | `individual`, `business`, or `enterprise` |
 | `--github-token` | `-g` | | Provide a GitHub token directly (skips OAuth) |
-| `--show-token` | | | Display tokens on fetch and refresh |
+| `--show-token` | | | Display tokens on fetch and refresh, and enable the local `/token` debug endpoint |
 | `--tavily-api-key` | | | Tavily API key for web search |
 | `--verbose` | `-v` | | Enable debug-level logging |
 | `--https` | | | Serve over HTTPS using a self-signed cert |
