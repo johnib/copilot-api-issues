@@ -13,11 +13,16 @@ on:
 
 jobs:
   claude:
+    # Only the repo owner (johnib) may trigger Claude. `@claude` runs on fork PRs
+    # with the base repo's secrets, so pinning the actor prevents anyone else —
+    # collaborators, org members, or external contributors — from firing it.
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      github.actor == 'johnib' && (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      )
     runs-on: ubuntu-latest
     # ANTHROPIC_BASE_URL must be job-level: a `uses:` step's env block does not
     # reach the composite action's `${{ env.* }}` context.
