@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.44.1 (2026-10-27)
+
+### Bug Fixes
+
+* raise hono floor to 4.12.23 (runtime Context export), closes [copilot-api-issues#14](https://github.com/copilot-api-issues/issues/14)
+
 ## 0.44.0 (2026-10-23)
 
 ### Features
