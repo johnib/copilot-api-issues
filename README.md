@@ -20,7 +20,8 @@ Want Claude Code on GPT and other non-Claude models? Pick one from your Copilot 
   Codex CLI     ─┤───── or ─────────▶│ copilot-api │──────┤     Chat Completions
   OpenAI SDK    ─┤  /v1/chat/        └─────────────┘      │     Responses API
   curl          ─┤  completions                           │     Embeddings
-  Any tool      ─┘                                        │
+  Any tool      ─┘                                        │     Images
+                                                          │
                                                           ├─▶ Microsoft Foundry /
                                                           │   Azure OpenAI
                                                           │   (--provider foundry)
@@ -37,6 +38,7 @@ Want Claude Code on GPT and other non-Claude models? Pick one from your Copilot 
   - [Claude Code](#claude-code)
   - [Codex CLI](#codex-cli)
   - [Web Search](#web-search)
+  - [Image Generation](#image-generation)
   - [Claude Cowork](#claude-cowork)
   - [Microsoft Foundry / Azure OpenAI](#microsoft-foundry--azure-openai)
 - [API Endpoints](#api-endpoints)
@@ -63,6 +65,7 @@ Want Claude Code on GPT and other non-Claude models? Pick one from your Copilot 
 | **Microsoft Foundry / Azure OpenAI** | Your own Azure deployments with `--provider foundry`: API key or Entra ID (`az login`, managed identity, service principal), no GitHub account needed |
 | **Copilot fallback** | `--fallback copilot`: Copilot answers when Foundry rate-limits, errors or times out, and finishes a Claude Code turn on an OpenAI deployment whose stream fails before any output; then traffic moves back to Foundry |
 | **Web search** | Optional web search for Claude Code and Codex sessions, via **Tavily and/or Exa** with automatic failover |
+| **Image generation & editing** | OpenAI **Images API** on Copilot's **GPT Image 2.5 Flare**: text-to-image, edits and multi-image composition, exact text rendering, transparent PNGs — see [Image Generation](#image-generation) |
 | **Dual API compatibility** | OpenAI Chat Completions, Anthropic Messages, and OpenAI Responses APIs side by side |
 | **HTTPS with auto-generated certs** | Self-signed TLS certs with configurable SANs -- works across VMs, containers, and LAN |
 | **Zero configuration** | Single command to start -- authenticates via GitHub device-code OAuth |
@@ -158,6 +161,64 @@ EXA_API_KEY=<key> TAVILY_API_KEY=<key> \
 The `--tavily-api-key` flag is **deprecated** — it still works and is equivalent
 to `TAVILY_API_KEY`, but prints a deprecation warning on startup. Prefer the
 environment variables, which also keep keys out of the process list.
+
+### Image Generation
+
+Copilot now serves an image model, **GPT Image 2.5 Flare** (`gpt-image-2.5-flare`, preview). The proxy exposes it through the standard **OpenAI Images API**, so any OpenAI SDK or tool that generates images works unchanged — no extra flags.
+
+**Generate** an image:
+
+```bash
+curl -s http://localhost:4141/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-image-2.5-flare",
+    "prompt": "A red fox reading a newspaper at a beach cafe, watercolor",
+    "size": "1024x1024",
+    "quality": "medium"
+  }' | jq -r '.data[0].b64_json' | base64 --decode > fox.png
+```
+
+**Edit** an image (or combine several — repeat `image[]`). JSON edits with `images: [{"image_url": "data:..."}]`, as Codex sends them, work too:
+
+```bash
+curl -s http://localhost:4141/v1/images/edits \
+  -F model=gpt-image-2.5-flare \
+  -F prompt="Give the fox a straw sun hat" \
+  -F "image[]=@fox.png" \
+  | jq -r '.data[0].b64_json' | base64 --decode > fox-hat.png
+```
+
+With the OpenAI Python SDK:
+
+```python
+import base64
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:4141/v1", api_key="dummy")
+img = client.images.generate(
+    model="gpt-image-2.5-flare",
+    prompt="A minimalist poster that says 'HELLO WORLD'",
+    size="1024x1536",
+    quality="high",
+)
+open("poster.png", "wb").write(base64.b64decode(img.data[0].b64_json))
+```
+
+| Option | Values |
+|:--|:--|
+| `size` | `1024x1024`, `1024x1536`, `1536x1024`, or a custom size **up to 3840×2160 (4K)**: longest edge ≤ 3840, aspect ratio 1:3 to 3:1, both sides divisible by 16 |
+| `quality` | `low`, `medium`, `high` (about 8–16 s per image at 1K, up to ~35 s at 4K) |
+| `output_format` | `png`, `jpeg` (with `output_compression`) |
+| `background` | `transparent` for PNGs with an alpha channel |
+| `n` | Several images per request |
+
+Good to know:
+
+- Images are billed by Copilot as **AI credits**, separately from chat models — roughly **0.6** (low) to **4** (high) credits per 1024×1024 image, and about **10** for a high-quality 4K image.
+- Available on Copilot Pro, Pro+, Business and Enterprise (not Free or Student). Organization admins can turn it off with the model policy.
+- `gpt-image-2.5-flare` works only on the Images endpoints, not on Chat Completions or Responses. Streaming (`stream: true`) is not supported by Copilot yet.
+- Edit uploads are limited to 100 MB per request. Image endpoints are Copilot-only (not available with `--provider foundry`).
 
 ### Claude Cowork
 
@@ -266,6 +327,9 @@ All endpoints are served at `http://localhost:4141` by default (`https://` when 
 | `POST` | `/v1/messages/count_tokens` | Anthropic Token Counting |
 | `POST` | `/v1/embeddings` | OpenAI Embeddings |
 | `POST` | `/embeddings` | OpenAI Embeddings without the `/v1` prefix |
+| `POST` | `/v1/images/generations` | OpenAI Images: generate (for example `gpt-image-2.5-flare`) |
+| `POST` | `/v1/images/edits` | OpenAI Images: edit (multipart/form-data, 100 MB body limit) |
+| `POST` | `/images/generations`, `/images/edits` | OpenAI Images without the `/v1` prefix |
 | `GET` | `/v1/models` | OpenAI Models |
 | `GET` | `/models` | OpenAI Models without the `/v1` prefix |
 | `GET` | `/usage` | GitHub Copilot usage and quota information |
