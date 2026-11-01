@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.45.0 (2026-11-01)
+
+### Features
+
+* add OpenAI Images API passthrough for gpt-image models
+
 ## 0.44.2 (2026-10-30)
 
 ### Bug Fixes
