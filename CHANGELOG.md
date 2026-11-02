@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.45.1 (2026-11-02)
+
+### Bug Fixes
+
+* self-test skips models the account cannot use
+
 ## 0.45.0 (2026-11-01)
 
 ### Features
