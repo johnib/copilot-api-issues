@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.46.0 (2026-11-03)
+
+### Features
+
+* serve 30 concurrent image requests in a 1.5 GB container
+
 ## 0.45.1 (2026-11-02)
 
 ### Bug Fixes
