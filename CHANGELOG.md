@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.0 (2026-11-06)
+
+### Features
+
+* support OpenAI Decisions API for gpt-6-luna-decisions
+
 ## 0.46.0 (2026-11-03)
 
 ### Features
