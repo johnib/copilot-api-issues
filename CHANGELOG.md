@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.1 (2026-11-06)
+
+### Bug Fixes
+
+* request full replay for unsupported message threads
+
 ## 0.47.0 (2026-11-06)
 
 ### Features
