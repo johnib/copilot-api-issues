@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.5 (2026-11-07)
+
+### Bug Fixes
+
+* classify local thread discovery rate limits as local in telemetry
+* remove the approval abort listener when the prompt answers first
+
 ## 0.47.4 (2026-11-07)
 
 ### Bug Fixes
