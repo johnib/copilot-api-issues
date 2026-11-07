@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.4 (2026-11-07)
+
+### Bug Fixes
+
+* honour Retry-After 0 and reject unterminated multipart params on images
+* return 503 with Retry-After for HTTP/2 NGHTTP2_ENHANCE_YOUR_CALM stream errors
+
 ## 0.47.3 (2026-11-07)
 
 ### Bug Fixes
