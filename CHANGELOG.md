@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.3 (2026-11-07)
+
+### Bug Fixes
+
+* take an images answer of exactly the spool limit and keep one deadline across 429 retries
+
 ## 0.47.2 (2026-11-07)
 
 ### Bug Fixes
