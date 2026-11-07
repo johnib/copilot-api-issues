@@ -3,6 +3,16 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.2 (2026-11-07)
+
+### Bug Fixes
+
+* a complete JSON image body claims no drain slot on an error reply
+* name the domain filter and value when Exa rejects a domain
+* offer only chat-type models to pickers and self-test
+* treat Bun fetch connection errors as transient transport errors
+* wrap non-object upstream error bodies on OpenAI routes
+
 ## 0.47.1 (2026-11-06)
 
 ### Bug Fixes
