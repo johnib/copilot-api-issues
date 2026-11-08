@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.6 (2026-11-08)
+
+### Bug Fixes
+
+* complete h2 error mocks in Copilot service tests
+* support bulk attributes in shared span mock
+
 ## 0.47.5 (2026-11-07)
 
 ### Bug Fixes
