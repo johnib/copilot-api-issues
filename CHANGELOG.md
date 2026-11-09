@@ -3,6 +3,15 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.9 (2026-11-09)
+
+### Bug Fixes
+
+* bound bridged Copilot user identifiers
+* reject declared oversized bodies before logger capture
+* reject malformed Responses tool shapes
+* retry Foundry 507 once through Copilot
+
 ## 0.47.8 (2026-11-09)
 
 ### Bug Fixes
