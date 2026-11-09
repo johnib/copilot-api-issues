@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.8 (2026-11-09)
+
+### Bug Fixes
+
+* cut image uploads that pass a total body deadline
+* record a late upload failure on the image attempt span
+
 ## 0.47.7 (2026-11-09)
 
 ### Bug Fixes
