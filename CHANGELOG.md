@@ -3,6 +3,15 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.7 (2026-11-09)
+
+### Bug Fixes
+
+* bound held multipart chunks, keep epilogues, abort rate-limit wait
+* do not keep the request Context alive while a stream is open
+* follow same-origin upstream redirects for image calls
+* pick the cgroup mount that holds the process membership
+
 ## 0.47.6 (2026-11-08)
 
 ### Bug Fixes
