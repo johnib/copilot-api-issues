@@ -3,6 +3,23 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.10 (2026-11-10)
+
+### Bug Fixes
+
+* abort the self-test request when its timeout fires
+* answer 503 images_unavailable when the image budget cannot hold any request
+* bound online connectivity probe telemetry
+* cancel upstream when the client disconnects on the Copilot paths
+* classify HTTP error logs by status
+* enforce the body size limit on chunked and understated bodies
+* move GPT token counts to a bounded worker
+* normalize Copilot embedding string inputs
+* read package versions from filesystem paths
+* report unavailable self-test candidates as inconclusive
+* return JSON errors for unsupported routes
+* skip cgroup directories that a nested or stacked mount covers
+
 ## 0.47.9 (2026-11-09)
 
 ### Bug Fixes
