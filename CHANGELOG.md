@@ -3,6 +3,16 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.47.11 (2026-11-11)
+
+### Bug Fixes
+
+* distinguish HTTP/2 peer faults from local closes
+* finalize Responses streams at their terminal event
+* preserve accepted HTTP/2 streams after graceful GOAWAY
+* preserve chat cache usage in Messages responses
+* stop filing [auto] issues for known upstream faults
+
 ## 0.47.10 (2026-11-10)
 
 ### Bug Fixes
