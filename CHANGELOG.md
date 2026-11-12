@@ -3,6 +3,17 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.0 (2026-11-12)
+
+### Bug Fixes
+
+* keep the Foundry backoff until a full quiet window
+* mark repository test telemetry explicitly
+
+### Features
+
+* answer Responses input_tokens with a local token count
+
 ## 0.47.11 (2026-11-11)
 
 ### Bug Fixes
