@@ -21,6 +21,7 @@ Want Claude Code on GPT and other non-Claude models? Pick one from your Copilot 
   OpenAI SDK    ─┤  /v1/chat/        └─────────────┘      │     Responses API
   curl          ─┤  completions                           │     Embeddings
   Any tool      ─┘                                        │     Images
+                                                          │     Decisions
                                                           │
                                                           ├─▶ Microsoft Foundry /
                                                           │   Azure OpenAI
@@ -66,6 +67,7 @@ Want Claude Code on GPT and other non-Claude models? Pick one from your Copilot 
 | **Copilot fallback** | `--fallback copilot`: Copilot answers when Foundry rate-limits, errors or times out, and finishes a Claude Code turn on an OpenAI deployment whose stream fails before any output; then traffic moves back to Foundry |
 | **Web search** | Optional web search for Claude Code and Codex sessions, via **Tavily and/or Exa** with automatic failover |
 | **Image generation & editing** | OpenAI **Images API** on Copilot's **GPT Image 2.5 Flare**: text-to-image, edits and multi-image composition, exact text rendering, transparent PNGs — see [Image Generation](#image-generation) |
+| **Decision models** | OpenAI **Decisions API** (`/v1/decisions`) on Copilot's **GPT-6 Luna Decisions**: yes/no, choice and score questions about text and images, each answer with a probability — see [Decision Models](#decision-models) |
 | **Dual API compatibility** | OpenAI Chat Completions, Anthropic Messages, and OpenAI Responses APIs side by side |
 | **HTTPS with auto-generated certs** | Self-signed TLS certs with configurable SANs -- works across VMs, containers, and LAN |
 | **Zero configuration** | Single command to start -- authenticates via GitHub device-code OAuth |
@@ -219,6 +221,28 @@ Good to know:
 - Available on Copilot Pro, Pro+, Business and Enterprise (not Free or Student). Organization admins can turn it off with the model policy.
 - `gpt-image-2.5-flare` works only on the Images endpoints, not on Chat Completions or Responses. Streaming (`stream: true`) is not supported by Copilot yet.
 - Edit uploads are limited to 100 MB per request. Image endpoints are Copilot-only (not available with `--provider foundry`).
+- Under Node, the proxy sees an image client disconnect during the `--rate-limit --wait` delay or the admission queue wait at once only when the unread body is small (below about 48 KB on Node 20 and about 100 KB on Node 22 and 24). With a larger upload the disconnect does not end the wait. The wait ends as it does for a client that stays, at the latest when the rate-limit window or the queue timeout ends (`COPILOT_API_IMAGES_QUEUE_TIMEOUT_MS`, default 45 s). When the request is admitted after the wait, the proxy sees the disconnect when it reads the rest of the body. When the wait ends in a 503 (queue timeout or memory pressure), the proxy does not read the body: it drains it in the background, or closes the connection when no drain slot is free. A model-first upload can start its upstream call before that, and the disconnect then cancels the upload. Under Bun the disconnect ends the wait at once for all sizes.
+- Image requests need memory. In a container, give the proxy a memory limit of at least about 600 MB for one image request at a time, and 1.5 GB is recommended. Below about 490 MB, the image budget is too small for some image requests (JSON requests without a Content-Length first, then generations, then all of them below about 470 MB): the proxy logs an error line at startup and at the first image request, and answers those requests with 503 `images_unavailable` and `x-should-retry: false`. `COPILOT_API_IMAGES_MEMORY_BUDGET_MB` sets the image budget directly.
+
+### Decision Models
+
+Copilot also serves a decision model, **GPT-6 Luna Decisions** (`gpt-6-luna-decisions`). It does not write text. It answers `predicate` (yes/no), `choice` and `score` questions about your input and returns a probability for each answer. The proxy exposes it through the **OpenAI Decisions API** (`POST /v1/decisions`). The request goes to Copilot unchanged, so the [OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions) applies, with one change: the guide examples use `"model": "gpt-6-luna"`, but on Copilot that name is a chat model and `/v1/decisions` rejects it with `model_not_supported`. Send `"model": "gpt-6-luna-decisions"`. The decision model does not work on `/v1/chat/completions`, `/v1/responses` or `/v1/messages`.
+
+```bash
+curl -s http://localhost:4141/v1/decisions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-6-luna-decisions",
+    "input": "I was charged twice for my order.",
+    "questions": [
+      {"type": "choice", "name": "department", "instructions": "Which team should handle this?",
+       "choices": [{"value": "billing"}, {"value": "technical"}]},
+      {"type": "predicate", "name": "angry", "instructions": "Is the customer angry?"}
+    ]
+  }'
+# {"answers":[{"type":"choice","name":"department","choice":"billing","confidence":1,...},
+#             {"type":"predicate","name":"angry","probability":0.42}],"usage":{...}}
+```
 
 ### Claude Cowork
 
@@ -323,6 +347,7 @@ All endpoints are served at `http://localhost:4141` by default (`https://` when 
 | `POST` | `/chat/completions` | OpenAI Chat Completions without the `/v1` prefix |
 | `POST` | `/v1/responses` | OpenAI Responses API |
 | `POST` | `/responses` | OpenAI Responses API without the `/v1` prefix |
+| `POST` | `/v1/responses/input_tokens`, `/responses/input_tokens` | OpenAI Responses token count: a local estimate of the instructions, input, function and custom tools and a `json_schema` output format (no upstream call; images, files, audio and server-side context such as `previous_response_id` are not counted) |
 | `POST` | `/v1/messages` | Anthropic Messages |
 | `POST` | `/v1/messages/count_tokens` | Anthropic Token Counting |
 | `POST` | `/v1/embeddings` | OpenAI Embeddings |
@@ -330,6 +355,8 @@ All endpoints are served at `http://localhost:4141` by default (`https://` when 
 | `POST` | `/v1/images/generations` | OpenAI Images: generate (for example `gpt-image-2.5-flare`) |
 | `POST` | `/v1/images/edits` | OpenAI Images: edit (multipart/form-data, 100 MB body limit) |
 | `POST` | `/images/generations`, `/images/edits` | OpenAI Images without the `/v1` prefix |
+| `POST` | `/v1/decisions` | OpenAI Decisions API (for example `gpt-6-luna-decisions`) |
+| `POST` | `/decisions` | OpenAI Decisions API without the `/v1` prefix |
 | `GET` | `/v1/models` | OpenAI Models |
 | `GET` | `/models` | OpenAI Models without the `/v1` prefix |
 | `GET` | `/usage` | GitHub Copilot usage and quota information |
@@ -406,6 +433,16 @@ Requires Tailscale installed and connected (`tailscale up`). See [docs/claude-co
 Platform support: **macOS**, **Linux**, **Windows** — anywhere Tailscale runs.
 
 ---
+
+### HTTP/2 runtime compatibility
+
+`COPILOT_H2=1` enables the Copilot HTTP/2 pool on Node 20.18.1 or later and Bun 1.4.0 or later.
+Bun versions before 1.4.0 report an incorrect peer stream identifier in GOAWAY events.
+For those versions, the proxy uses HTTP/1.1 and shows one compatibility warning.
+It also disables HTTP/2 keepalive and reports the effective transport as HTTP/1.1.
+The checks cover Bun 1.3.11, 1.3.14, 1.4.0, and 1.4.4.
+Unknown Bun version formats also use HTTP/1.1 with the warning.
+Foundry continues to use its existing HTTP/1.1 policy.
 
 ## Telemetry
 
