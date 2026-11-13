@@ -3,6 +3,17 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.3 (2026-11-13)
+
+### Bug Fixes
+
+* cancel the upstream error body read on a client disconnect and record a client cancel as a client abort
+* carry tool search results and tool changes through the translators
+* forward the client prompt_cache_key on Copilot /responses
+* let short commands exit by unref of the completion-log cleanup timer
+* print the package version for --version and exit with code 0
+* stop false offline probes and needless or hung Copilot token exchanges
+
 ## 0.48.2 (2026-11-13)
 
 ### Bug Fixes
