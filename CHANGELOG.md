@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.4 (2026-11-13)
+
+### Bug Fixes
+
+* set the Foundry fallback headers cap by request type
+
 ## 0.48.3 (2026-11-13)
 
 ### Bug Fixes
