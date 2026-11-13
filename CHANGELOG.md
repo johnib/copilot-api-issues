@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.5 (2026-11-13)
+
+### Bug Fixes
+
+* return a Responses refusal as text and keep the Anthropic stream valid when output items overlap
+
 ## 0.48.4 (2026-11-13)
 
 ### Bug Fixes
