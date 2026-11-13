@@ -3,6 +3,17 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.2 (2026-11-13)
+
+### Bug Fixes
+
+* give the local --rate-limit rejection its own error type
+* keep CLI argument values out of process.command_args telemetry
+* record stream failure type, forward gaps, pings and reasoning tokens on passthrough streams
+* record the inner transport cause and the real exception type
+* stop the root span export for cached /v1/models answers
+* tag direct 4xx answers with copilot_api.error_type
+
 ## 0.48.1 (2026-11-12)
 
 ### Bug Fixes
