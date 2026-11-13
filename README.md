@@ -401,7 +401,7 @@ All endpoints are served at `http://localhost:4141` by default (`https://` when 
 | `--rate-limit` | `-r` | | Minimum seconds between requests |
 | `--wait` | `-w` | `false` | Wait instead of returning an error when the configured rate limit is hit |
 | `--timeout` | `-t` | `600000` | Request timeout in ms (default 10 min). A streamed Claude Code turn on a non-Claude model waits at most 4 min for the upstream to start answering |
-| `--connect-timeout` | | `15000` | Connectivity probe timeout in ms; overrides `COPILOT_CONNECT_TIMEOUT_MS` |
+| `--connect-timeout` | | `15000` | Connectivity probe timeout in ms for one probe cycle; overrides `COPILOT_CONNECT_TIMEOUT_MS`. The probe endpoints divide it equally (3 endpoints: one third each, 333 ms each at the 1000 ms minimum). A value above the default also raises the limit of the Copilot token exchange, which is 15000 ms otherwise |
 | `--account-type` | `-a` | `individual` | `individual`, `business`, or `enterprise` |
 | `--github-token` | `-g` | | Provide a GitHub token directly (skips OAuth) |
 | `--show-token` | | | Display tokens on fetch and refresh, and enable the local `/token` debug endpoint |
