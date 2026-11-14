@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.7 (2026-11-14)
+
+### Bug Fixes
+
+* bound body-capture memory when a request arrives in tiny chunks
+* tag the root span when an in-process transport retry recovers
+
 ## 0.48.6 (2026-11-14)
 
 ### Bug Fixes
