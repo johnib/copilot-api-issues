@@ -3,6 +3,15 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.8 (2026-11-14)
+
+### Bug Fixes
+
+* answer 429 before the Content-Length 413 on rate-limited routes
+* drop the --no-smoke-test hint from the shared self-test timeout reason
+* keep a token stored by the 401/403 retry path on a terminal refresh failure
+* keep the tool schema estimate when a schema is very deep
+
 ## 0.48.7 (2026-11-14)
 
 ### Bug Fixes
