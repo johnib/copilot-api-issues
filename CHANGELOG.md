@@ -3,6 +3,15 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.6 (2026-11-14)
+
+### Bug Fixes
+
+* apply the rate limit before the Foundry fallback reads the body
+* count composite and referenced tool schema content in the token estimate
+* drop the --manual advice from the self-test timeout reason
+* keep a token that the 401/403 retry path stored when a scheduled refresh exhausts its retries
+
 ## 0.48.5 (2026-11-13)
 
 ### Bug Fixes
