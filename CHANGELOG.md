@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.11 (2026-11-15)
+
+### Bug Fixes
+
+* keep OpenTelemetry logs exported when api-logs copies differ
+
 ## 0.48.10 (2026-11-15)
 
 ### Bug Fixes
