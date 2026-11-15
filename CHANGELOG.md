@@ -3,6 +3,14 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.2 (2026-11-15)
+
+### Bug Fixes
+
+* keep the upstream Anthropic error envelope on the in-band SSE error
+* raise the OpenTelemetry dependency floors to the resolved set
+* register the observable gauges once per meter and drop the dead meter mock
+
 ## 0.49.1 (2026-11-15)
 
 ### Bug Fixes
