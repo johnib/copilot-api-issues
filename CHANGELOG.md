@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.10 (2026-11-15)
+
+### Bug Fixes
+
+* forward an Anthropic error body from the Claude passthrough unchanged
+
 ## 0.48.9 (2026-11-14)
 
 ### Bug Fixes
