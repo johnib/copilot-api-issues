@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.13 (2026-11-15)
+
+### Bug Fixes
+
+* pass upstream retry headers through on every forwarded error
+
 ## 0.48.12 (2026-11-15)
 
 ### Bug Fixes
