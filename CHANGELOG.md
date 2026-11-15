@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.5 (2026-11-15)
+
+### Bug Fixes
+
+* send a non-streamed Foundry turn streamed so a stall falls back to Copilot
+
 ## 0.49.4 (2026-11-15)
 
 ### Bug Fixes
