@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.0 (2026-11-15)
+
+### Features
+
+* log the Copilot weekly or session limit and its reset time on a 429
+
 ## 0.48.14 (2026-11-15)
 
 ### Bug Fixes
