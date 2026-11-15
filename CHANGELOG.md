@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.48.14 (2026-11-15)
+
+### Bug Fixes
+
+* accept only RFC 9110 dates in retry-after and wait for error reports in tests
+
 ## 0.48.13 (2026-11-15)
 
 ### Bug Fixes
