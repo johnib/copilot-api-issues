@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.4 (2026-11-15)
+
+### Bug Fixes
+
+* forward anthropic-ratelimit-unified-* on successful native Messages responses
+
 ## 0.49.3 (2026-11-15)
 
 ### Bug Fixes
