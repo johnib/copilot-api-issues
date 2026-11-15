@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.1 (2026-11-15)
+
+### Bug Fixes
+
+* clean up the Copilot plan-limit log line and drop an infinite retry-after
+
 ## 0.49.0 (2026-11-15)
 
 ### Features
