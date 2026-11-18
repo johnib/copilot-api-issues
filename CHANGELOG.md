@@ -3,6 +3,13 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.6 (2026-11-18)
+
+### Bug Fixes
+
+* make a second initOtel() call a no-op so shutdown flushes the SDK that holds the providers
+* make the --codex and --claude-code launch commands work on Windows and route Codex to the proxy
+
 ## 0.49.5 (2026-11-15)
 
 ### Bug Fixes
