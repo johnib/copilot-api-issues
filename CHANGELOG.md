@@ -3,6 +3,12 @@
 User-facing changes to [`copilot-api-node20`](https://www.npmjs.com/package/copilot-api-node20).
 Full list: [Releases](https://github.com/johnib/copilot-api-issues/releases).
 
+## 0.49.7 (2026-11-20)
+
+### Bug Fixes
+
+* export the copilot_api.server.shutdown span by ending it before shutdownOtel runs
+
 ## 0.49.6 (2026-11-18)
 
 ### Bug Fixes
